@@ -1,6 +1,3 @@
-from flask import Flask, render_template, request, redirect
+from fastapi import FastAPI
 
-app = Flask(__name__)
-
-if __name__ == "__main__":
-    app.run(debug=True)
+app = FastAPI()
