@@ -1,14 +1,8 @@
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-
+from presentation.schemas.auth import LoginRequest
 from service.Authorization import AuthService
 
 router = APIRouter()
-
-class LoginRequest(BaseModel):
-    mail: str
-    phone: str
-    password: str
 
 @router.post("/login")
 def login(data: LoginRequest):
