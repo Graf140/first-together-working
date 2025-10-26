@@ -1,7 +1,7 @@
 from models.UserModel import UserModelActions
 from models.UserSession import UserSessionModelActions
 from werkzeug.security import check_password_hash
-from JWTFunc import JWTFunctions
+from service.JWTFunc import JWTFunctions
 import datetime
 
 #exceptions
