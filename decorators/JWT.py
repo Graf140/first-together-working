@@ -22,7 +22,7 @@ from marshmallow import ValidationError as MarshmallowValidationError
 #     return wrapper
 
 
-def is_json_request(schema=None):
+def is_json_request_dec(schema=None):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):

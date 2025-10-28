@@ -3,7 +3,7 @@ from functools import wraps
 from fastapi import HTTPException
 
 
-def validate_phone(func):
+def validate_phone_dec(func):
     """
     Валидация телефона, все просто
     """
@@ -33,3 +33,15 @@ def validate_phone(func):
         return await func(*args, **kwargs)
 
     return wrapper
+
+
+
+def is_valid_phone(phone: str) -> bool:
+    if not isinstance(phone, str):
+        return False
+    # Должно быть 7–15 символов из разрешённого набора
+    if not re.match(r'^[\+\d\(\)\s\-]{7,15}$', phone):
+        return False
+    # И хотя бы 7 цифр
+    digits = re.sub(r'\D', '', phone)
+    return len(digits) >= 7

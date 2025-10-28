@@ -3,7 +3,7 @@ from functools import wraps
 from fastapi import HTTPException
 
 
-def validate_email(func):
+def validate_email_dec(func):
     """
     Валидация email
     """

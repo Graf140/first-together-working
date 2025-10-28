@@ -8,7 +8,7 @@ from psycopg2.errors import UniqueViolation
 from exceptions import *
 
 
-class AcountRepository:
+class AccountRepository:
     @staticmethod
     def get_all_users():
         conn = get_db_connection()
@@ -62,19 +62,18 @@ class AcountRepository:
         return user
 
     @staticmethod
-    def create_user(first_name, last_name, email, midle_name, user_id, phone):
+    def create_account(first_name, last_name, email, middle_name, user_id, phone):
         conn = get_db_connection()
         try:
             cur = conn.cursor(cursor_factory=RealDictCursor)
-            cur.execute('INSERT INTO acounts (first_name, last_name, email, '
-                        'midle_name, user_id, phone) VALUES (%s, %s)',
-                        (first_name, last_name, email, midle_name, user_id, phone))
+            cur.execute("""
+                            INSERT INTO accounts (email, phone, first_name, middle_name, last_name)
+                            VALUES (%s, %s, %s, %s, %s)
+                            RETURNING id
+                        """, (email, phone, first_name, middle_name, last_name))
+            user_id = cur.fetchone()[0]
             conn.commit()
-            return True
-
-        # except UniqueViolation: #когда добавляешь уникальный адрес, телефон, то выскакивает эта ошибка
-        #     conn.rollback()
-        #     raise UserAlreadyExistsError(f"Пользователь с именем '{name}' уже существует")
+            return str(user_id)
 
         except DatabaseError: #не бизнес ошибка, не обрабатываем как кастомную
             conn.rollback()
