@@ -37,21 +37,4 @@ class JWTFunctions:
         except JWTError as e:
             print("Token error:", e)
             return False
-    #
-    # @staticmethod
-    # def token_required(f):
-    #     @wraps(f)
-    #     def decorated(*args, **kwargs):
-    #         if request.is_json:
-    #             token = request.json.get('token')
-    #             login = request.json.get('login')
-    #             if token is None or login is None:
-    #                 return jsonify({"message":"no login/token!"}), 401
-    #             if AuthService.check_token_session(user=login, token=token):
-    #                 return f(*args, **kwargs)
-    #             else:
-    #                 return jsonify({"message": "Invalid token"}), 401
-    #         else:
-    #             return jsonify({"message": "Token not found"}), 401
-    #     return decorated
 

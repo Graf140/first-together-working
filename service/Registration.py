@@ -25,4 +25,3 @@ class RegistrationMethods:
         except Exception as e:
             raise RegistrationServiceDeeperFail("Something went wrong on models layer: ",e)
 
-print(RegistrationMethods.registrate_user("1234","asdas","asd"))

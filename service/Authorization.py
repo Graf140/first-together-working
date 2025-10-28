@@ -60,6 +60,6 @@ class AuthService:
         finally:
             return status
 
-print(AuthService.authorize_user(LoginRequest(mail="tmp_mail",phone="79103568222",password="rootroot")))
+
 
 

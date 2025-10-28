@@ -1,5 +1,5 @@
 from models.database import get_db_action, close_db_action
-from presentation.schemas.session import *
+from presentation.Exceptions.UserSessionExceptions import *
 
 
 class UserSessionModelActions:
@@ -17,8 +17,8 @@ class UserSessionModelActions:
             connection.commit()
             status = result is not None
         except Exception as e:
-            print(e)
             connection.rollback()
+            raise UserSessionNewSession("Something went wrong (DB): ", e)
         finally:
             cursor.close()
             close_db_action(connection)
@@ -38,8 +38,8 @@ class UserSessionModelActions:
             connection.commit()
             status = result is not None
         except Exception as e:
-            print(e)
             connection.rollback()
+            raise UserSessionTokenExists("Something went wrong (DB): ", e)
         finally:
             cursor.close()
             close_db_action(connection)
@@ -58,8 +58,8 @@ class UserSessionModelActions:
             connection.commit()
             status = result>0
         except Exception as e:
-            print(e)
             connection.rollback()
+            raise UserSessionChangeStatus("Something went wrong (DB): ", e)
         finally:
             cursor.close()
             close_db_action(connection)
@@ -79,8 +79,8 @@ class UserSessionModelActions:
             connection.commit()
             status = result > 0
         except Exception as e:
-            print(e)
             connection.rollback()
+            raise UserSessionDeleteSession("Something went wrong (DB): ", e)
         finally:
             cursor.close()
             close_db_action(connection)
@@ -100,8 +100,8 @@ class UserSessionModelActions:
             connection.commit()
             status = result>0
         except Exception as e:
-            print(e)
             connection.rollback()
+            raise UserSessionUpdateToken("Something went wrong (DB): ", e)
         finally:
             cursor.close()
             close_db_action(connection)

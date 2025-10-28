@@ -1,7 +1,7 @@
 from models.database import get_db_action,close_db_action
 from presentation.schemas.user import *
 from presentation.schemas.user import PasswordHash
-from pydantic import EmailStr
+from presentation.Exceptions.UserModelExceptions import *
 
 
 #id
@@ -25,8 +25,8 @@ class UserModelActions:
             connection.commit()
             status = result is not None
         except Exception as e:
-            print(e)
             connection.rollback()
+            raise UserModelRegUser("Something went wrong (DB): ",e)
         finally:
             cursor.close()
             close_db_action(connection)
@@ -46,8 +46,8 @@ class UserModelActions:
             connection.commit()
             status = result > 0
         except Exception as e:
-            print(e)
             connection.rollback()
+            raise UserModelDeleteUser("Something went wrong (DB): ", e)
         finally:
             cursor.close()
             close_db_action(connection)
@@ -68,8 +68,8 @@ class UserModelActions:
             if result is None:
                 return False
         except Exception as e:
-            print(e)
             connection.rollback()
+            raise UserModelTakePassword("Something went wrong (DB): ", e)
         finally:
             cursor.close()
             close_db_action(connection)
@@ -88,8 +88,8 @@ class UserModelActions:
             result = cursor.fetchone()
             connection.commit()
         except Exception as e:
-            print(e)
             connection.rollback()
+            raise UserModelTakeUser("Something went wrong (DB): ", e)
         finally:
             cursor.close()
             close_db_action(connection)
