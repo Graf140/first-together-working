@@ -1,5 +1,5 @@
 from models.database import get_db_action, close_db_action
-
+from presentation.schemas.session import *
 
 
 class UserSessionModelActions:
@@ -46,13 +46,13 @@ class UserSessionModelActions:
             return status
 
     @staticmethod
-    def change_status(token:str, status:bool)->bool:
+    def change_status(status:bool, token:str)->bool:
         connection = get_db_action()
         cursor = connection.cursor()
         try:
             cursor.execute(
                 "UPDATE user_session SET status=%s WHERE token=%s;",
-                (status,token)
+                (status, token)
             )
             result = cursor.rowcount
             connection.commit()
@@ -66,7 +66,7 @@ class UserSessionModelActions:
             return status
 
     @staticmethod
-    def delete_session(token:str):
+    def delete_session(token:str) -> bool:
         connection = get_db_action()
         cursor = connection.cursor()
         status = None
@@ -87,13 +87,14 @@ class UserSessionModelActions:
             return status
 
     @staticmethod
-    def update_token(true_token:str, new_token:str)->bool:
+    def update_token(new_token:str, true_token:str)->bool:
         connection = get_db_action()
         cursor = connection.cursor()
+        status = None
         try:
             cursor.execute(
                 "UPDATE user_session SET token=%s WHERE token=%s;",
-                (new_token,true_token)
+                (new_token, true_token)
             )
             result = cursor.rowcount
             connection.commit()

@@ -47,32 +47,18 @@ class JWTConfig:
             "algorithm":self.__crypt_algorithm
         }
 
+class AccountServiceConnection:
+
+    def __init__(self):
+        self.__identification_factor = "1"
+        self.__api_path_account = "/v1/accounts/load_data"
+
+    def get_identification_factor(self):
+        return self.__identification_factor
+
+    def get_api_path_account(self):
+        return self.__api_path_account
+
 data =  DatabaseConfig()
 jwt_config = JWTConfig()
-
-
-
-
-# from datetime import datetime, timedelta
-# from jose import JWTError, jwt
-# from passlib.context import CryptContext
-#
-# SECRET_KEY = "your-secret-key"
-# ALGORITHM = "HS256"
-# ACCESS_TOKEN_EXPIRE_MINUTES = 30
-#
-# pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-# def create_access_token(data: dict):
-#     to_encode = data.copy()
-#     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-#     to_encode.update({"exp": expire})
-#     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-#     return encoded_jwt
-#
-# def verify_token(token: str):
-#     try:
-#         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-#         return payload
-#     except JWTError:
-#         return None
+account_service = AccountServiceConnection()
