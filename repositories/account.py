@@ -13,7 +13,7 @@ class AccountRepository:
     def get_all_users():
         conn = get_db_connection()
         cur = conn.cursor(cursor_factory=RealDictCursor)
-        cur.execute('SELECT * FROM acounts')
+        cur.execute('SELECT * FROM accounts')
         users = cur.fetchall()
         cur.close()
         release_db_connection(conn)
@@ -24,7 +24,7 @@ class AccountRepository:
         conn = get_db_connection()
         cur = conn.cursor()
         try:
-            cur.execute('SELECT COUNT(*) FROM acounts')
+            cur.execute('SELECT COUNT(*) FROM accounts')
             count = cur.fetchone()[0]
             return count
         finally:
@@ -35,7 +35,7 @@ class AccountRepository:
     def get_user_by_id(user_id):
         conn = get_db_connection()
         cur = conn.cursor(cursor_factory=RealDictCursor)
-        cur.execute('SELECT * FROM acounts WHERE user_id = %s', (user_id,))
+        cur.execute('SELECT * FROM accounts WHERE user_id = %s', (user_id,))
         user = cur.fetchone()
         cur.close()
         release_db_connection(conn)
@@ -45,7 +45,7 @@ class AccountRepository:
     def get_user_by_email(email):
         conn = get_db_connection()
         cur = conn.cursor(cursor_factory=RealDictCursor)
-        cur.execute('SELECT * FROM acounts WHERE email = %s', (email,))
+        cur.execute('SELECT * FROM accounts WHERE email = %s', (email,))
         user = cur.fetchone()
         cur.close()
         release_db_connection(conn)
@@ -55,22 +55,23 @@ class AccountRepository:
     def get_user_by_phone(phone):
         conn = get_db_connection()
         cur = conn.cursor(cursor_factory=RealDictCursor)
-        cur.execute('SELECT * FROM acounts WHERE phone = %s', (phone,))
+        cur.execute('SELECT * FROM accounts WHERE phone = %s', (phone,))
         user = cur.fetchone()
         cur.close()
         release_db_connection(conn)
         return user
 
     @staticmethod
-    def create_account(first_name, last_name, email, middle_name, user_id, phone):
+    def create_account(first_name, last_name, email, middle_name, phone, avatar_url):
         conn = get_db_connection()
         try:
             cur = conn.cursor(cursor_factory=RealDictCursor)
             cur.execute("""
-                            INSERT INTO accounts (email, phone, first_name, middle_name, last_name)
-                            VALUES (%s, %s, %s, %s, %s)
-                            RETURNING id
-                        """, (email, phone, first_name, middle_name, last_name))
+                    INSERT INTO accounts (email, phone, first_name, 
+                                         middle_name, last_name, avatar_url)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                    RETURNING id
+                        """, (email, phone, first_name, middle_name, last_name, avatar_url))
             user_id = cur.fetchone()[0]
             conn.commit()
             return str(user_id)

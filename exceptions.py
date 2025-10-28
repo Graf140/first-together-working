@@ -1,29 +1,42 @@
-#exceptions, глобально храню
+# exceptions.py
 
-class UserAlreadyExistsError(ValueError): #пользователь совпадает уже
+class UserAlreadyExistsError(ValueError):
+    """Вызывается, когда пользователь с таким email или телефоном уже существует."""
     pass
 
-class InvalidPasswordError(ValueError): #пароль не бьет или пароли не совпадают
+
+class InvalidPasswordError(ValueError):
     pass
 
-class PustoyLoginParolError(ValueError): #тривиально
+
+class PustoyLoginParolError(ValueError):
     pass
 
-class UserNotFoundError(ValueError): #пользователь не найден
+class ZaprosError(ValueError):
     pass
 
-class ValidationError(ValueError): #ошибка валидации
-    def __init__(self, *args: object):
-        super().__init__(args)
-        self.messages = None
 
+class UserNotFoundError(ValueError):
     pass
+
+
+class ValidationError(ValueError):
+    """Общая ошибка валидации данных."""
+    def __init__(self, message: str):
+        super().__init__(message)
+        self.message = message
+
 
 class PostNotFoundError(ValueError):
+    """Вызывается, когда пост не найден."""
     pass
+
 
 class ExpiredTokenError(ValueError):
+    """Вызывается, когда JWT-токен просрочен."""
     pass
 
+
 class InvalidTokenError(ValueError):
+    """Вызывается, когда JWT-токен повреждён или подделан."""
     pass

@@ -8,6 +8,7 @@ from schemas.account_schemas import *
 from typing import Optional
 from pydantic import EmailStr
 from decorators.phone import *
+from exceptions import *
 
 
 # !!!не защищаемая информация!!!(напрямую в БД)
@@ -18,31 +19,36 @@ def read_root():
 
 @app.get("/v1/accounts/search")
 def search_account(
-        email: Optional[EmailStr] = Query(None),
-        phone: Optional[str] = Query(None),
-        user_id: Optional[str] = Query(None)):
-
-    count = sum(1 for x in [email, phone, user_id] if x is not None)
+    email: Optional[EmailStr] = Query(None),
+    phone: Optional[str] = Query(None),
+    user_id: Optional[str] = Query(None)
+):
+    count = 0
+    for x in [email, phone, user_id]:
+        if x is not None:
+            count += 1
 
     if count == 0:
-        raise HTTPException(400, "Укажите email, phone или user_id")
+        raise ZaprosError("Укажите email, phone или user_id")
     if count > 1:
-        raise HTTPException(400, "Укажите только один параметр: email, phone или user_id")
+        raise ZaprosError("Укажите только один параметр: email, phone или user_id")
 
-    # Поиск
-    if email is not None:
-        user = AccountRepository.get_user_by_email(email)
-    elif phone is not None:
-        if not is_valid_phone(phone):
-            raise HTTPException(status_code=400, detail="Invalid phone format")
-        user = AccountRepository.get_user_by_phone(phone)
-    elif user_id is not None:
-        if not user_id.isdigit():
-            raise HTTPException(status_code=400, detail="user_id должно быть числом")
-        user = AccountRepository.get_user_by_id(user_id)
+    # Валидация телефона (если передан)
+    if phone is not None and not is_valid_phone(phone):
+        raise ValueError("Нет от формат телефона")
+
+    # Валидация user_id (если передан)
+    if user_id is not None and not user_id.isdigit():
+        raise ValueError("user_id должно быть числом")
+
+    user = AccountService.search_user(
+        email=email,
+        phone=phone,
+        user_id=user_id
+    )
 
     if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise UserNotFoundError("User not found")
 
     return user
 
