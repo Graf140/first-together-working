@@ -2,14 +2,14 @@ from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
 class UserRegisterIn(BaseModel):
-    mail: EmailStr
+    mail: str
     phone: str
     password_hash: str
 
 
 class UserIdentifyIn(BaseModel):
     """Используется для delete_user и take_pass — нужны mail + phone"""
-    mail: EmailStr
+    mail: str
     phone: str
 
 class UserOut(BaseModel):

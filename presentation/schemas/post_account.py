@@ -8,4 +8,4 @@ class PostAccount(BaseModel):
     last_name: str
     mail: str
     phone: str
-    date_created: datetime
+    date_created: datetime.datetime

@@ -11,7 +11,7 @@ from presentation.Exceptions.AuthExceptions import *
 class AuthService:
     @staticmethod
     def authorize_user(data: LoginRequest)-> str | None:
-        user_data = UserModelActions.take_user(data.mail, data.phone)
+        user_data = UserModelActions.take_user(data.email, data.phone)
         token = None
         if user_data is None:
             raise AuthServiceUserExists("User already exists")

@@ -12,25 +12,26 @@ from presentation.Exceptions.UserModelExceptions import *
 
 class UserModelActions:
     @staticmethod
-    def reg_user(mail:str ,phone:str ,password_hash:str)->bool:
+    def reg_user(mail:str ,phone:str ,password_hash:str)->int | bool:
         connection = get_db_action()
         cursor = connection.cursor()
-        status = None
+        result = None
         try:
             cursor.execute(
                 "INSERT INTO users (mail, phone, password_hash) VALUES (%s, %s, %s) RETURNING id;",
                 (mail, phone, password_hash)
             )
-            result = cursor.fetchone()
+            result = cursor.fetchone()[0]
             connection.commit()
-            status = result is not None
+            if result is None:
+                result = False
         except Exception as e:
             connection.rollback()
             raise UserModelRegUser("Something went wrong (DB): ",e)
         finally:
             cursor.close()
             close_db_action(connection)
-            return status
+            return result
 
     @staticmethod
     def delete_user(mail:str ,data:str)->bool:

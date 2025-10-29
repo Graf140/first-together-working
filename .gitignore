@@ -13,6 +13,8 @@ ENV/
 
 # Environment variables
 .env
+docker-compose.yml
+Dockerfile
 
 # FastAPI / Uvicorn
 uvicorn.log

@@ -51,7 +51,7 @@ class AccountServiceConnection:
 
     def __init__(self):
         self.__identification_factor = "1"
-        self.__api_path_account = "/v1/accounts/load_data"
+        self.__api_path_account = "https://gwxi0j-91-195-137-201.ru.tuna.am/v1/accounts"
 
     def get_identification_factor(self):
         return self.__identification_factor

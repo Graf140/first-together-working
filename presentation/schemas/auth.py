@@ -2,7 +2,7 @@ from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 
 class LoginRequest(BaseModel):
-    mail: str
+    email: str
     phone: str = Field(..., min_length=1)
     password: str = Field(..., min_length=1)
 
