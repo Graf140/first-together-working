@@ -62,17 +62,20 @@ class AccountRepository:
         return user
 
     @staticmethod
-    def create_account(first_name, last_name, email, middle_name, phone, avatar_url):
+    def create_account(first_name, last_name, email, middle_name, phone, user_id):
         conn = get_db_connection()
         try:
             cur = conn.cursor(cursor_factory=RealDictCursor)
             cur.execute("""
                     INSERT INTO accounts (email, phone, first_name, 
-                                         middle_name, last_name, avatar_url)
+                                         middle_name, last_name, user_id)
                     VALUES (%s, %s, %s, %s, %s, %s)
-                    RETURNING id
-                        """, (email, phone, first_name, middle_name, last_name, avatar_url))
-            user_id = cur.fetchone()[0]
+                    RETURNING user_id
+                        """, (email, phone, first_name, middle_name, last_name, user_id))
+            row = cur.fetchone()
+            if row is None:
+                raise Exception("Не удалось создать аккаунт: RETURNING id вернул пустой результат")
+
             conn.commit()
             return str(user_id)
 

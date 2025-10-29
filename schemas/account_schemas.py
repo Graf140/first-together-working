@@ -10,13 +10,12 @@ class CreateAccountRequest(BaseModel):
     first_name: str
     middle_name: Optional[str] = None
     last_name: str
-    avatar_url: Optional[AnyHttpUrl] = None
+    user_id: int
 
 class AccountCreatedResponse(BaseModel):
-    user_id: str
+    user_id: int
     email: EmailStr
     phone: str
     first_name: str
     middle_name: Optional[str] = None
     last_name: str
-    avatar_url: Optional[AnyHttpUrl] = None

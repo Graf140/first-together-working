@@ -1,27 +1,31 @@
-from fastapi import FastAPI, HTTPException, Request
-from app import app
+from fastapi import APIRouter
 from repositories.account import AccountRepository
 from fastapi import Query
 from services.account import AccountService
-import json
 from schemas.account_schemas import *
 from typing import Optional
 from pydantic import EmailStr
 from decorators.phone import *
 from exceptions import *
+import logging
+
+router = APIRouter(prefix="/v1/accounts", tags=["Accounts"])
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 # !!!не защищаемая информация!!!(напрямую в БД)
-@app.get("/")
+
+@router.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"Hello": "Api working"}
 
 
-@app.get("/v1/accounts/search")
+@router.get("/search/")
 def search_account(
-    email: Optional[EmailStr] = Query(None),
-    phone: Optional[str] = Query(None),
-    user_id: Optional[str] = Query(None)
+        email: Optional[EmailStr] = Query(None),
+        phone: Optional[str] = Query(None),
+        user_id: Optional[str] = Query(None)
 ):
     count = 0
     for x in [email, phone, user_id]:
@@ -53,7 +57,7 @@ def search_account(
     return user
 
 
-#Что такое регистрация пользователя? Это
+# Что такое регистрация пользователя? Это
 # 1. Валидация данных запросы
 # 2. Проверка, не существует ли такой.
 # 3. Создание account.
@@ -65,29 +69,36 @@ def search_account(
 # отдает назад данные для формирования токена - auth создаёт токен
 
 
-@app.post("/v1/accounts", response_model=AccountCreatedResponse)
+@router.post("/", response_model=AccountCreatedResponse)
 def create_account(request: CreateAccountRequest):
     # Проверка на существование email
+    print("Полученные данные:", request.dict())
+
     if AccountRepository.get_user_by_email(request.email) is not None:
+        msg = f"Попытка создания аккаунта с уже существующим email: {request.email}"
+        logger.warning(msg)
         raise HTTPException(status_code=409, detail="Аккаунт с указанным email уже создан!")
 
     # Проверка на существование телефона
     if AccountRepository.get_user_by_phone(request.phone) is not None:
+        msg = f"Попытка создания аккаунта с уже существующим телефоном: {request.phone}"
+        logger.warning(msg)
         raise HTTPException(status_code=409, detail="Аккаунт с указанным телефоном уже создан!")
 
-    user_id = AccountRepository.create_account(
+    AccountRepository.create_account(
+        user_id=request.user_id,
         email=request.email,
         phone=request.phone,
         first_name=request.first_name,
         middle_name=request.middle_name,
-        last_name=request.last_name
+        last_name=request.last_name,
     )
 
     return AccountCreatedResponse(
-        user_id=user_id,
+        user_id=request.user_id,
         email=request.email,
         phone=request.phone,
         first_name=request.first_name,
         middle_name=request.middle_name,
-        last_name=request.last_name
+        last_name=request.last_name,
     )
