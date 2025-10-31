@@ -12,7 +12,7 @@ ENV/
 .idea/
 
 # Environment variables
-.env
+../account_service/.env
 docker-compose.yml
 Dockerfile
 
