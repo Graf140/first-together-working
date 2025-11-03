@@ -1,10 +1,10 @@
-#error_handlers.py
+# error_handlers.py
 
 from fastapi import HTTPException
 from fastapi.exceptions import RequestValidationError
 from starlette.responses import JSONResponse
-
 from exceptions import *
+
 
 def reg_error_handler(app):
     @app.exception_handler(UserAlreadyExistsError)

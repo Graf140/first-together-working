@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from repositories.account import AccountRepository
+from ..repositories.account import AccountRepository
 
 
 class AccountService:

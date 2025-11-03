@@ -1,6 +1,5 @@
 # auth_service/schemas/account_schemas.py
 from typing import Optional
-
 from pydantic import BaseModel, EmailStr, AnyHttpUrl
 
 

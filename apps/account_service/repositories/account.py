@@ -5,7 +5,7 @@ from .db import get_db_connection, release_db_connection
 from psycopg2 import DatabaseError
 from psycopg2.extras import RealDictCursor
 from psycopg2.errors import UniqueViolation
-from exceptions import *
+from ..exceptions import *
 
 
 class AccountRepository:

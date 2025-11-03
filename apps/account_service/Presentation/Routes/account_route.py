@@ -1,12 +1,12 @@
 from fastapi import APIRouter
-from repositories.account import AccountRepository
+from ...repositories.account import AccountRepository
 from fastapi import Query
-from services.account import AccountService
-from schemas.account_schemas import *
+from ...services.account import AccountService
+from ...schemas.account_schemas import *
 from typing import Optional
 from pydantic import EmailStr
-from decorators.phone import *
-from exceptions import *
+from ...decorators.phone import *
+from ...exceptions import *
 import logging
 
 router = APIRouter(prefix="/v1/accounts", tags=["Accounts"])
