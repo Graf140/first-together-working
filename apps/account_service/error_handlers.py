@@ -3,7 +3,7 @@
 from fastapi import HTTPException
 from fastapi.exceptions import RequestValidationError
 from starlette.responses import JSONResponse
-from exceptions import *
+from apps.account_service.exceptions import *
 
 
 def reg_error_handler(app):

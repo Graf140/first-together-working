@@ -2,7 +2,7 @@
 import psycopg2 #бд
 from psycopg2 import pool
 
-from ..config.database import DatabaseConfig
+from apps.account_service.config.database import DatabaseConfig
 
 
 connection_pool = psycopg2.pool.SimpleConnectionPool(
