@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+nats-py
+pydantic
+python-dotenv
+pydantic[email]
